@@ -73,8 +73,8 @@ export default {
         for (const d in payment.destinations) {
           const destination = payment.destinations[d];
           const destName = PEOPLE[destination];
-          owed[sourceName][destName] += payment.amount;
-          owed[destName][sourceName] -= payment.amount;
+          owed[sourceName][destName] += Math.floor(payment.amount/payment.destinations.length);
+          owed[destName][sourceName] -= Math.floor(payment.amount/payment.destinations.length);
         }
       }
 
