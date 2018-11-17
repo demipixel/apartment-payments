@@ -128,4 +128,4 @@ function saveDataFromRoute(res, successMessage, isJson) {
 
 app.use(express.static(__dirname + '/../../client/dist'));
 
-app.listen(3000 || process.env.PORT);
+app.listen(process.env.PORT || 80);
