@@ -39,7 +39,7 @@
             v-for="person in PEOPLE"
             :key="person"
             v-model="destinations"
-            :disabled="(paymentType && (person == you || (destinations.length > 0 && !destinations.includes(person))))"
+            :disabled="paymentType && (person == you || (destinations.length > 0 && !destinations.includes(person)))"
             :native-value="person">
             {{ person }}
         </b-checkbox>
