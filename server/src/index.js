@@ -69,15 +69,10 @@ app.get('/api/create', (req, res) => {
   const allPeopleValid = destinations.reduce((valid, person) => valid && PEOPLE.includes(person), true);
   if (!allPeopleValid)
     return res.status(400).send('Not all destinations are valid!');
-  if (destinations.includes(source)) {
-    return res.status(400).send('Destination cannot contain source!');
-  }
   if (amount <= 0)
     return res.status(400).send('Invalid amount. Must be greater than 0!');
   if (amount > 1000*100)
     return res.status(400).send('Yeah, you really shouldn\'t be handling transactions of $1000+ in this program....');
-  if (amount % destinations.length != 0)
-    return res.status(400).send('Amount must be divisible by number of destinations');
   
   const id = db.nextId++;
   const payment = {

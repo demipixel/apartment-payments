@@ -39,7 +39,7 @@
             v-for="person in PEOPLE"
             :key="person"
             v-model="destinations"
-            :disabled="person == you || (paymentType && destinations.length > 0 && !destinations.includes(person))"
+            :disabled="(paymentType && (person == you || (destinations.length > 0 && !destinations.includes(person))))"
             :native-value="person">
             {{ person }}
         </b-checkbox>
@@ -88,21 +88,13 @@ export default {
   },
 
   computed: {
-    amountDivisible() {
-      return this.destinations.length &&
-        Math.floor(parseFloat(this.amount)*100) % this.destinations.length == 0;
-    },
     chargeText() {
       if (this.destinations.length <= 1) {
         return this.paymentType ? 'Pay' : 'Request from'
       } else {
         if (this.paymentType) return '';
         const amt = parseFloat(this.amount);
-        if (this.amountDivisible) {
-          return `Split ($${(amt/this.destinations.length).toFixed(2)} each)`
-        } else {
-          return 'Split (Not divisible)';
-        }
+        return `Split ($${(Math.floor(amt/this.destinations.length*100)/100).toFixed(2)} each)`
       }
     }
   },
@@ -113,6 +105,7 @@ export default {
 
   methods: {
     fixDestinations() {
+      if (!this.paymentType) return;
       this.destinations = this.destinations.filter(d => d != this.you);
     },
 
@@ -127,8 +120,6 @@ export default {
         this.amountError = 'Incorrect format! Must be in format #.## (e.g. $26.50)';
       } else if (parseFloat(this.amount) >= 1000) {
         this.amountError = 'Too large!';
-      } else if (this.destinations != 0 && !this.amountDivisible) {
-        this.amountError = 'Amount must be divisible by number of payers.';
       } else {
         this.amountError = null;
       }
@@ -141,6 +132,8 @@ export default {
 
       if (!this.destinations.length) {
         this.destinationError = 'You must choose at least one person.';
+      } else if (!this.destinations.filter(d => d != this.you).length) {
+        this.destinationError = 'You must choose at least one person other yourself.';
       } else {
         this.destinationError = null;
       }

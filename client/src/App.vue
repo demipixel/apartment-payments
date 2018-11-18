@@ -73,6 +73,7 @@ export default {
         for (const d in payment.destinations) {
           const destination = payment.destinations[d];
           const destName = PEOPLE[destination];
+          if (sourceName == destName) continue;
           owed[sourceName][destName] += Math.floor(payment.amount/payment.destinations.length);
           owed[destName][sourceName] -= Math.floor(payment.amount/payment.destinations.length);
         }
@@ -107,7 +108,6 @@ export default {
       });
 
     this.$vueEventBus.$on('new-payment', payment => {
-      console.log(payment);
       this.db.payments.push(payment);
     });
 
