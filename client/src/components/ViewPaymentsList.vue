@@ -8,7 +8,7 @@
     </button>
 
     <b-table
-          :data="(payments || []).reverse()"
+          :data="(payments || []).slice().reverse()"
           paginated
           per-page="8"
           detailed
