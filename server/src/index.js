@@ -73,6 +73,8 @@ app.get('/api/create', (req, res) => {
     return res.status(400).send('Invalid amount. Must be greater than 0!');
   if (amount > 1000*100)
     return res.status(400).send('Yeah, you really shouldn\'t be handling transactions of $1000+ in this program....');
+  if (isNaN(amount))
+    return res.status(400).send('Amount is not a number. Make sure the amount is valid!');
   
   const id = db.nextId++;
   const payment = {
