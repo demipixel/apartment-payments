@@ -37,7 +37,7 @@
 
           <template slot="detail" slot-scope="props">
               <div class="content">
-                ${{ props.row.description.replace(/\n/g, '<br>') }}
+                <span v-html="newLineToBreak(props.row.description)"></span>
                 {{ props.row.destinations.length > 1 ? `($${(props.row.amount/100/props.row.destinations.length).toFixed(2)} each)` : ''}}
                 <button
                   class="button is-danger is-small delete-button"
@@ -70,6 +70,10 @@ export default {
   created() {
     this.getPerson = id => {
       return PEOPLE[id];
+    }
+
+    this.newLineToBreak = str => {
+      return str.replace(/<.+>/g, '').replace(/\n/g, '<br />');
     }
 
     this.style = {
